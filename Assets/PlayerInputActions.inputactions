@@ -1,0 +1,34 @@
+{
+    "name": "PlayerInputActions",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "ae6f6234-a7f4-4482-9bec-fc2068f7663b",
+            "actions": [
+                {
+                    "name": "Rotate Camera",
+                    "type": "PassThrough",
+                    "id": "9768eca3-279a-4fe5-88e0-4801827a2e11",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ad3558c5-af50-4ef1-84f7-f30f891429c2",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
