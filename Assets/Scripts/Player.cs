@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int PlayerPoints { get; private set; } = 0;
+    public int PlayerPoints { get; set; } = 0;
 
     private void Awake()
     {
@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
         Enemy.OnHit += GetPoint_OnHit;
     }
 
-        private void GetPoint_OnHit(object sender, Enemy.OnHitEventArgs e)
+    private void GetPoint_OnHit(object sender, Enemy.OnHitEventArgs e)
     {
         PlayerPoints += e.points;
     }
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     private void Fine_OnLifeTimeEnd(object sender, EventArgs e)
     {
         //Debug.Log("Fine_OnLifeTimeEnd");
-        if (PlayerPoints - 1 != 0)
+        if (PlayerPoints > 0)
         {
             PlayerPoints--;
         }

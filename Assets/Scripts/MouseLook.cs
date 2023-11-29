@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,27 @@ public class MouseLook : MonoBehaviour
 
     private float xRotation = 0f;
     private float yRotation = 0f;
+
+    private bool CanRotate = false;
+    private void Awake()
+    {
+        UIManager.OnGameStarted += StartCameraRotation_OnGameStarted;
+        Game.OnEndGame += FrozeCameraRotation_OnEndGame;
+    }
+
+    private void FrozeCameraRotation_OnEndGame(object sender, Game.OnEndGameEventArgs e)
+    {
+        CanRotate = false;
+        Debug.Log("FrozeCameraRotation_OnEndGame");
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void StartCameraRotation_OnGameStarted(object sender, EventArgs e)
+    {
+        CanRotate = true;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -18,8 +40,12 @@ public class MouseLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 inputVector = gameInput.GetCameraRotationNormalized();
-        RotateCamera(inputVector);
+        if (CanRotate)
+        {
+            Vector2 inputVector = gameInput.GetCameraRotationNormalized();
+            RotateCamera(inputVector);
+        }
+
     }
 
     private void RotateCamera(Vector2 input)

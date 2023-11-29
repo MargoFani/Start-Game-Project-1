@@ -13,53 +13,44 @@ public class Enemy : MonoBehaviour
 
     public static EventHandler OnLifeTimeEnd;
     public static EventHandler<OnHitEventArgs> OnHit;
+    private bool CanMove = true;
     public class OnHitEventArgs : EventArgs
     {
         public int points;
 
     }
     private float timer = -1;
-    // зеленые - 5 очков, оранжевые - 7
-    //private int[] pointsToType = new int[] { 5, 7 };
-    // время жизни зеленые - 2,5 секунд, оранжевые - 2 секунды
-    //private float[] lifeTimeToType = new float[] { 2.5f, 2f };
 
+    private void Awake()
+    {
+        Game.OnEndGame += StopMovement_OnEndGame;
+    }
     private void Start()
     {
         StartLifeLifetime();
     }
     private void Update()
     {
-        if (timer != -1)
+        if (CanMove)
         {
-            if (timer > 0)
+            if (timer != -1)
             {
-                timer -= Time.deltaTime;
+                if (timer > 0)
+                {
+                    timer -= Time.deltaTime;
+                }
+                if (timer < 0)
+                {
+                    EndLifeTime();
+                    //сделать ивент и вычесть у игрока 1 очко
+                }
             }
-            if (timer < 0)
-            {
-                EndLifeTime();
-                //сделать ивент и вычесть у игрока 1 очко
-            }
+
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, transform.position.z - distance), speed * Time.deltaTime);
+
         }
-
-        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y, transform.position.z - distance), speed*Time.deltaTime);
-
     }
-    //private void SetPointsAndLifeTime()
-    //{        
-    //    points = pointsToType[(int) type];
-    //    lifeTime = lifeTimeToType[(int) type];
 
-    //}
-
-    //public void SetType(EnemyType t)
-    //{
-    //    type = t;
-    //    //for test
-    //    SetPointsAndLifeTime();
-    //}
-    //включается после создания объекта на сцене
     public void StartLifeLifetime()
     {
         timer = lifeTime;
@@ -71,11 +62,16 @@ public class Enemy : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-
     private void EndLifeTime()
     {
         OnLifeTimeEnd?.Invoke(this, EventArgs.Empty);
         Destroy(this.gameObject);
+    }
+
+    private void StopMovement_OnEndGame(object sener, Game.OnEndGameEventArgs e)
+    {
+        CanMove = false;
+        Debug.Log("StopMovement_OnEndGame");
     }
     public enum EnemyType { Green, Orange }
 }

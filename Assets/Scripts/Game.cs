@@ -23,28 +23,63 @@ public class Game : MonoBehaviour
     private int greenEnemyCount = 21;
     private int orangeEnemyCount = 9;
     private int allEnemyCount = 30;
-    //враги появляются каждую секунду, игра длится 30 секунд => появляется 30 врагов
-    //30% - оранжевых, 70% зеленых 
-    //или 9 оранжевых и 21 зеленый
 
-    private void Start()
+    private bool IsGameStarted = false;
+
+
+    public static EventHandler<OnEndGameEventArgs> OnEndGame;
+    public class OnEndGameEventArgs : EventArgs
     {
-        GenerateSpownQueue();
-        var queue = string.Concat(spownQueue.Select(e => (int) e));
-        Debug.Log(queue);
-        //enemiesPlaces[2] = Instantiate(enemyPrefabs[0], startPoints[2].position, Quaternion.identity).GetComponent<Enemy>();
+        public int points;
+    }
+    private void Awake()
+    {
+        UIManager.OnGameStarted += StartGame_OnGameStarted;
+    }
 
-        //enemiesPlaces[5] = Instantiate(enemyPrefabs[1], startPoints[5].position, Quaternion.identity).GetComponent<Enemy>();
+    private void StartGame_OnGameStarted(object sender, EventArgs e)
+    {
+        spownTimer = 0;
+        gameTimer = 30f;
+        player.PlayerPoints = 0;
+        for (int i = 0; i < enemiesPlaces.Length; i++)
+        {
+            if (enemiesPlaces[i] != null)
+            {
+                Destroy(enemiesPlaces[i].gameObject);
+            }
+        }
+        spownQueue = new Queue<Enemy.EnemyType>();
+        GenerateSpownQueue();
+        IsGameStarted = true;
+        //var queue = string.Concat(spownQueue.Select(e => (int)e));
+        //Debug.Log(queue);
+
 
     }
+
     private void Update()
-    {        
-        spownTimer += Time.deltaTime;
-        if(1 - spownTimer < 0)
+    {
+        if (IsGameStarted)
         {
-            GenerateEnemy();
-            spownTimer -= 1;
+            spownTimer += Time.deltaTime;
+            gameTimer -= Time.deltaTime;
+            if (gameTimer < 0)
+            {
+                Debug.Log("player.PlayerPoints: " + player.PlayerPoints);
+                OnEndGame?.Invoke(this, new OnEndGameEventArgs { points = this.player.PlayerPoints });
+                IsGameStarted = false;
+                return;
+            }
+            if (1 - spownTimer < 0)
+            {
+                GenerateEnemy();
+                spownTimer -= 1;
+            }
+
+
         }
+
     }
 
     private void GenerateEnemy()
@@ -82,12 +117,10 @@ public class Game : MonoBehaviour
         for(int i = 0; i<greenEnemyCount; i++)
         {
             tempEnemies[i] = Enemy.EnemyType.Green;
-            Debug.Log(i + " : " + tempEnemies[i]);
         }
         for (int i = greenEnemyCount; i < orangeEnemyCount + greenEnemyCount; i++)
         {
             tempEnemies[i] = Enemy.EnemyType.Orange;
-            Debug.Log(i + " : " + tempEnemies[i]);
         }
 
         tempEnemies = Shuffle(tempEnemies);

@@ -20,6 +20,20 @@ public class InputHandler : MonoBehaviour
         playerInputActions.Player.Enable();
         timer = 0;
         CanShoot = true;
+        Game.OnEndGame += DisablePlayerShoot_OnEndGame;
+        UIManager.OnGameStarted += EnablePlayerShoot_OnGameStarted;
+    }
+
+    private void EnablePlayerShoot_OnGameStarted(object sender, EventArgs e)
+    {
+        playerInputActions.Player.Shoot.Enable();
+        CanShoot = true;
+    }
+
+    private void DisablePlayerShoot_OnEndGame(object sender, Game.OnEndGameEventArgs e)
+    {
+        playerInputActions.Player.Shoot.Disable();
+        CanShoot = false;
     }
 
     private void Update()
@@ -49,9 +63,8 @@ public class InputHandler : MonoBehaviour
         return inputVector;
 
     }
-    public void OnClick(InputAction.CallbackContext context)
+    public void Shoot()
     {
-        if (!context.started) return;
         if (CanShoot)
         {
             timer = coolDown;

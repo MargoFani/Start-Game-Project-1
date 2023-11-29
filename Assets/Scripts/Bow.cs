@@ -16,14 +16,20 @@ public class Bow : MonoBehaviour
         inputHandler.OnShoot += Shoot_OnShoot;
     }
 
+    private void StopShooting_OnEndGame(object sender, Game.OnEndGameEventArgs e)
+    {
+        Debug.Log("StopShooting_OnEndGame");
+    }
 
     private void Shoot_OnShoot(object sender, EventArgs e)
     {
+
         Debug.Log("Shoot");
         RaycastHit hit;
-        if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, range, enemyMask))
+        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, range, enemyMask))
         {
             hit.collider.GetComponentInParent<Enemy>().SendPointsToPlayer();
         }
+
     }
 }
