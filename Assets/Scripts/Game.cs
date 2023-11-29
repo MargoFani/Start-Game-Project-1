@@ -11,7 +11,8 @@ public class Game : MonoBehaviour
     //игра длится 30 секунд
     private float gameTimer = 30f;
 
-    private int playerPoints = 0;
+    [SerializeField] private Player player;
+
     [SerializeField] private Transform[] startPoints;
     [SerializeField] private Transform[] enemyPrefabs;
     //7 троекторий, по которым могут перемещаться враги
@@ -26,17 +27,6 @@ public class Game : MonoBehaviour
     //30% - оранжевых, 70% зеленых 
     //или 9 оранжевых и 21 зеленый
 
-    private void Awake()
-    {
-        Enemy.OnLifeTimeEnd += Fine_OnLifeTimeEnd;
-        Enemy.OnHit += GetPoint_OnHit;
-    }
-
-    private void GetPoint_OnHit(object sender, Enemy.OnHitEventArgs e)
-    {
-        playerPoints += e.points;
-    }
-
     private void Start()
     {
         GenerateSpownQueue();
@@ -48,8 +38,7 @@ public class Game : MonoBehaviour
 
     }
     private void Update()
-    {
-        Debug.Log("points: " + playerPoints);
+    {        
         spownTimer += Time.deltaTime;
         if(1 - spownTimer < 0)
         {
@@ -57,14 +46,7 @@ public class Game : MonoBehaviour
             spownTimer -= 1;
         }
     }
-    private void Fine_OnLifeTimeEnd(object sender, EventArgs e)
-    {
-        //Debug.Log("Fine_OnLifeTimeEnd");
-        if (playerPoints - 1 != 0)
-        {
-            playerPoints--;
-        }
-    }
+
     private void GenerateEnemy()
     {
         System.Random rand = new System.Random();
