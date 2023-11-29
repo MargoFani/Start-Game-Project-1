@@ -6,7 +6,7 @@ using UnityEngine.Windows;
 public class MouseLook : MonoBehaviour
 {
     [SerializeField] private float mouseSensitiity = 100f;
-    [SerializeField] private GameInput gameInput;
+    [SerializeField] private InputHandler gameInput;
 
     private float xRotation = 0f;
     private float yRotation = 0f;
