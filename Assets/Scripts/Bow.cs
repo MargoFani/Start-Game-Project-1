@@ -23,7 +23,7 @@ public class Bow : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, range, enemyMask))
         {
-            Debug.Log(hit.transform.name);
+            hit.collider.GetComponentInParent<Enemy>().SendPointsToPlayer();
         }
     }
 }

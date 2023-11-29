@@ -12,6 +12,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float speed = 0;
 
     public static EventHandler OnLifeTimeEnd;
+    public static EventHandler<OnHitEventArgs> OnHit;
+    public class OnHitEventArgs : EventArgs
+    {
+        public int points;
+
+    }
     private float timer = -1;
     // зеленые - 5 очков, оранжевые - 7
     //private int[] pointsToType = new int[] { 5, 7 };
@@ -59,9 +65,16 @@ public class Enemy : MonoBehaviour
         timer = lifeTime;
     }
 
+    public void SendPointsToPlayer()
+    {
+        OnHit?.Invoke(this, new OnHitEventArgs { points = this.points});
+        Destroy(this.gameObject);
+    }
+
+
     private void EndLifeTime()
     {
-        OnLifeTimeEnd(this, EventArgs.Empty);
+        OnLifeTimeEnd?.Invoke(this, EventArgs.Empty);
         Destroy(this.gameObject);
     }
     public enum EnemyType { Green, Orange }
