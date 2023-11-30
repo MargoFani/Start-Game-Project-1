@@ -13,6 +13,7 @@ public class Game : MonoBehaviour
     private float gameTimer = 30f;
 
     [SerializeField] private Text actualPlayerPoints;
+    [SerializeField] private Text actualTimer;
 
     [SerializeField] private Player player;
 
@@ -46,6 +47,7 @@ public class Game : MonoBehaviour
         gameTimer = 30f;
         player.PlayerPoints = 0;
         actualPlayerPoints.text = player.PlayerPoints.ToString();
+        actualTimer.text = "00:" + Math.Ceiling(gameTimer).ToString();
         for (int i = 0; i < enemiesPlaces.Length; i++)
         {
             if (enemiesPlaces[i] != null)
@@ -69,6 +71,7 @@ public class Game : MonoBehaviour
             spownTimer += Time.deltaTime;
             gameTimer -= Time.deltaTime;
             actualPlayerPoints.text = player.PlayerPoints.ToString();
+            actualTimer.text = "00:" + Math.Ceiling(gameTimer).ToString();
             if (gameTimer < 0)
             {
                 Debug.Log("player.PlayerPoints: " + player.PlayerPoints);
