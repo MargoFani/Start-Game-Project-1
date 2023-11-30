@@ -63,8 +63,9 @@ public class InputHandler : MonoBehaviour
         return inputVector;
 
     }
-    public void Shoot()
+    public void OnClick(InputAction.CallbackContext context)
     {
+        if (!context.started) return;
         if (CanShoot)
         {
             timer = coolDown;

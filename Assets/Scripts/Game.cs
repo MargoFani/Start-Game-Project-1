@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
     private float spownTimer = 0;
     //игра длится 30 секунд
     private float gameTimer = 30f;
+
+    [SerializeField] private Text actualPlayerPoints;
 
     [SerializeField] private Player player;
 
@@ -42,6 +45,7 @@ public class Game : MonoBehaviour
         spownTimer = 0;
         gameTimer = 30f;
         player.PlayerPoints = 0;
+        actualPlayerPoints.text = player.PlayerPoints.ToString();
         for (int i = 0; i < enemiesPlaces.Length; i++)
         {
             if (enemiesPlaces[i] != null)
@@ -64,6 +68,7 @@ public class Game : MonoBehaviour
         {
             spownTimer += Time.deltaTime;
             gameTimer -= Time.deltaTime;
+            actualPlayerPoints.text = player.PlayerPoints.ToString();
             if (gameTimer < 0)
             {
                 Debug.Log("player.PlayerPoints: " + player.PlayerPoints);
