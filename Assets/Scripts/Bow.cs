@@ -11,6 +11,8 @@ public class Bow : MonoBehaviour
     [SerializeField] private InputHandler inputHandler;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask enemyMask;
+    [SerializeField] private AudioSource bowShootSound;
+
     private void Awake()
     {
         inputHandler.OnShoot += Shoot_OnShoot;
@@ -26,6 +28,7 @@ public class Bow : MonoBehaviour
 
         Debug.Log("Shoot");
         RaycastHit hit;
+        bowShootSound.Play();
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, range, enemyMask))
         {
             hit.collider.GetComponentInParent<Enemy>().SendPointsToPlayer();
